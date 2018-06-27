@@ -1,9 +1,9 @@
 ---
 - name: start pinpoint-collector
-  service: name=pinpoint-collector state=started enabled=true
+  service: name=pinpoint-collector state=started #enabled=true
 
 - name: start pinpoint-web
-  service: name=pinpoint-web state=started enabled=true
+  service: name=pinpoint-web state=started #enabled=true
 
 - name: start hbase
   service: name=hbase state=started
