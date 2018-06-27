@@ -1,0 +1,31 @@
+---
+pinpoint_user: pinpoint
+pinpoint_group: pinpoint
+
+pinpoint_hbase_user: hbase
+pinpoint_hbase_group: hbase
+
+pinpoint_java_6_home: /sw/jdk1.6.0_45
+pinpoint_java_7_home: /sw/jdk1.7.0_80
+pinpoint_java_8_home: /usr/lib/jvm/jdk1.8.0_131
+pinpoint_java_home: /usr/lib/jvm/jdk1.8.0_131
+
+pinpoint_hbase_install_dir: /sw/hbase
+pinpoint_data_dir: /data/pinpoint
+pinpoint_hbase_rootdir: "{{ pinpoint_data_dir }}/hbase"
+pinpoint_hbase_zookeeper_property_dataDir: "{{ pinpoint_data_dir }}/zookeeper"
+
+pinpoint_collector_tomcat_home: /sw/pinpoint-collector
+pinpoint_collector_tomcat_log_dir: /logs/pinpoint-collector
+
+pinpoint_web_tomcat_home: /sw/pinpoint-web
+pinpoint_web_tomcat_log_dir: /logs/pinpoint-web
+
+pinpoint_hbase_java_home: "{{ pinpoint_java_home }}"
+pinpoint_hbase_log_dir: /logs/hbase
+
+pinpoint_collector_span_port: 8888
+pinpoint_collector_stat_port: 8877
+pinpoint_collector_tcp_port: 8866
+
+pinpoint_collector_web_port: 8855

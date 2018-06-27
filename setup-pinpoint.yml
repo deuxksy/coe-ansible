@@ -1,0 +1,6 @@
+---
+- name: setup pinpoint-server
+  hosts: pinpoint-server
+  become: yes
+  roles:
+    - pinpoint-server

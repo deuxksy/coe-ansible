@@ -1,0 +1,85 @@
+---
+- name: Check if Hbase Service Exists
+  stat: path=/etc/systemd/system/hbase.service
+  register: hbase_service_status
+
+- include_tasks: init_hbase.yml
+  when: not hbase_service_status.stat.exists
+  tag: initizlize hbase
+
+- include_tasks: install_hbase.yml
+  when: not hbase_service_status.stat.exists
+  tag: install hbase
+
+- include_tasks: config_hbase.yml
+  when: not hbase_service_status.stat.exists
+  tag: config and run hbase
+  
+- name: config hbase group sudoers
+  template:
+    src: hbase/sudoers.j2
+    dest: /etc/sudoers.d/hbase
+    mode: 0440
+
+# pinpoint-common
+
+- include_tasks: config_pinpoint_user.yml
+  tag: config pinpoint user
+
+- import_tasks: config_user_profile.yml
+
+# pinpoint-collector
+
+- name: Check if Pinpoint Collector Service Exists
+  stat: path=/etc/systemd/system/pinpoint-collector.service
+  register: pinpoint_collector_service_status
+
+- include_tasks: create_pinpoint_database.yml
+  when: not pinpoint_collector_service_status.stat.exists
+  tag: initialize pinpoint database
+
+- include_tasks: init_pinpoint_collector.yml
+  when: not pinpoint_collector_service_status.stat.exists
+  tag: config pinpoint user setting
+
+- include_tasks: install_pinpooint_colector_tomcat.yml
+  when: not pinpoint_collector_service_status.stat.exists
+  tag: install pinpoint collector tomcat
+
+- include_tasks: install_pinpoint_collector.yml
+  when: not pinpoint_collector_service_status.stat.exists
+  tag: install pinpoint server
+
+- name: config pinpoint group sudoers for pinpoint-collector
+  template:
+    src: pinpoint-collector/sudoers.j2
+    dest: /etc/sudoers.d/pinpoint-collector
+    mode: 0440
+  when: not pinpoint_collector_service_status.stat.exists
+
+# pinpoint-web
+
+- name: Check if Pinpoint web Service Exists
+  stat: path=/etc/systemd/system/pinpoint-web.service
+  register: pinpoint_web_service_status
+
+- include_tasks: init_pinpoint_web.yml
+  when: not pinpoint_web_service_status.stat.exists
+  tag: config pinpoint user setting
+
+- include_tasks: install_pinpooint_web_tomcat.yml
+  when: not pinpoint_web_service_status.stat.exists
+  tag: install pinpoint web tomcat
+
+- include_tasks: install_pinpoint_web.yml
+  when: not pinpoint_web_service_status.stat.exists
+  tag: install pinpoint server
+
+- name: config pinpoint group sudoers for pinpoint-web
+  template:
+    src: pinpoint-web/sudoers.j2
+    dest: /etc/sudoers.d/pinpoint-web
+    mode: 0440
+  when: not pinpoint_web_service_status.stat.exists
+
+

@@ -1,0 +1,10 @@
+---
+pinpoint_collector_ip: localhost
+pinpoint_collector_span_port: 8888
+pinpoint_collector_stat_port: 8877
+pinpoint_collector_tcp_port: 8866
+
+
+pinpoint_agent_install_dir: /sw/pinpoint-agent
+pinpoint_agent_user: pinpoint
+pinpoint_agent_group: pinpoint

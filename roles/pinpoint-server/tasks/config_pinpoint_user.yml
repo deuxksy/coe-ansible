@@ -1,0 +1,33 @@
+---
+- name: check if pinpoint user exists (ignore errors)
+  command: id {{ pinpoint_user }}
+  ignore_errors: yes
+  changed_when: false
+  register: user_exists
+
+- name: add pinpoint group
+  group:
+    name: "{{ pinpoint_group }}"
+    state: present
+  when: user_exists|failed
+
+- name: add pinpoint user
+  user:
+    name: "{{ pinpoint_user }}"
+    group: "{{ pinpoint_group }}"
+    comment: "Pinpoint"
+    home: "/home/{{ pinpoint_user }}"
+    shell: /bin/bash
+  when: user_exists|failed
+
+- name: ensure java_home are in the profile file
+  lineinfile:
+    dest: /etc/profile
+    regexp: '^export {{ item.key }}='
+    line: "export {{ item.key }}={{ item.value }}"
+    state: present
+  with_items:
+    - { key: JAVA_6_HOME, value: "{{ pinpoint_java_6_home }}" }
+    - { key: JAVA_7_HOME, value: "{{ pinpoint_java_7_home }}" }
+    - { key: JAVA_8_HOME, value: "{{ pinpoint_java_8_home }}" }
+    - { key: JAVA_HOME, value: "{{ pinpoint_java_home }}" }

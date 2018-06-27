@@ -1,0 +1,9 @@
+---
+- name: download and unarchive hbase
+  unarchive:
+    extra_opts: ['--strip-components=1', '--show-stored-names']
+    src: http://apache.mirror.cdnetworks.com/hbase/1.2.6.1/hbase-1.2.6.1-bin.tar.gz
+    dest: "{{ pinpoint_hbase_install_dir }}"
+    remote_src: yes
+    owner: "{{ pinpoint_hbase_user }}"
+    group: "{{ pinpoint_hbase_group }}"

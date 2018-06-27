@@ -1,0 +1,8 @@
+---
+- name: copy pinoint create tables script
+  copy: # files 폴더의 하위 파일을 dest로 복사
+    src: hbase/hbase-create.hbase 
+    dest: /tmp/
+
+- name: create pinpoint initial database
+  shell: "{{ pinpoint_hbase_install_dir }}/bin/hbase shell /tmp/hbase-create.hbase"

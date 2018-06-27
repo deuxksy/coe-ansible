@@ -1,0 +1,11 @@
+---
+- name: create pinpoint collector working directory
+  file: 
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    owner: "{{ pinpoint_user }}"
+    group: "{{ pinpoint_group }}"
+  with_items:
+    - "{{ pinpoint_collector_tomcat_home }}"
+    - "{{ pinpoint_collector_tomcat_log_dir }}"

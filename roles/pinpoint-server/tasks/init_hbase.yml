@@ -1,0 +1,33 @@
+---
+- name: check if hbase user exists (ignore errors)
+  command: id {{ pinpoint_hbase_user }}
+  ignore_errors: yes
+  changed_when: false
+  register: hbase_user_exists
+
+- name: add hbase group
+  group:
+    name: "{{ pinpoint_hbase_group }}"
+    state: present
+  when: hbase_user_exists|failed
+
+- name: add hbase user
+  user:
+    name: "{{ pinpoint_hbase_user }}"
+    group: "{{ pinpoint_hbase_group }}"
+    comment: "Hbase"
+    home: "/home/{{ pinpoint_hbase_user }}"
+    shell: /bin/bash
+  when: hbase_user_exists|failed
+
+- name: create hbase working directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    owner: "{{ pinpoint_hbase_user }}"
+    group: "{{ pinpoint_hbase_group }}"
+  with_items:
+    - "{{ pinpoint_hbase_install_dir }}"
+    - "{{ pinpoint_data_dir }}"
+    - "{{ pinpoint_hbase_log_dir }}"

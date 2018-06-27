@@ -1,0 +1,18 @@
+[Unit]
+Description=Hbase for Pinpoint
+After=network.target
+
+[Service]
+Type=forking
+
+ExecStart={{ pinpoint_hbase_install_dir }}/bin/start-hbase.sh
+ExecStop={{ pinpoint_hbase_install_dir }}/bin/stop-hbase.sh
+
+User={{ pinpoint_hbase_user }}
+Group={{ pinpoint_hbase_group }}
+UMask=0007
+RestartSec=15
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

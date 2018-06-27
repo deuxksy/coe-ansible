@@ -1,0 +1,33 @@
+---
+- name: deleted old pinpoint-agent working directory
+  file:
+    path: "{{ pinpoint_agent_install_dir }}"
+    state: "{{ item }}"
+    owner: "{{ pinpoint_agent_user }}"
+    group: "{{ pinpoint_agent_group }}"
+  with_items:
+    - absent
+    - directory
+
+- name: copy and unarchive pinpoint-agent
+  unarchive:
+    src: pinpoint-agent-1.7.1.tar.gz
+    dest: "{{ pinpoint_agent_install_dir }}"
+    owner: "{{ pinpoint_agent_user }}"
+    group: "{{ pinpoint_agent_group }}"
+
+- name: config pinpoint.conf file
+  template:
+    src: pinpoint.config.j2
+    dest: "{{ pinpoint_agent_install_dir }}/pinpoint.config"
+    mode: 0644
+    owner: "{{ pinpoint_agent_user }}"
+    group: "{{ pinpoint_agent_group }}"
+
+- name: config log4j.xml file
+  template:
+    src: log4j.xml.j2
+    dest: "{{ pinpoint_agent_install_dir }}/lib/log4j.xml"
+    mode: 0644
+    owner: "{{ pinpoint_agent_user }}"
+    group: "{{ pinpoint_agent_group }}"

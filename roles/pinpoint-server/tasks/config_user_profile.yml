@@ -1,0 +1,12 @@
+---
+- name: create {{ pinpoint_user }} user home directory from nxdeadmin
+  command: "cp -r /home/nxdeadmin /home/{{ pinpoint_user }}"
+
+- name: change own {{ pinpoint_user }} user home directory
+  command: "chown -R {{ pinpoint_user }}:{{ pinpoint_group }}  /home/{{ pinpoint_user }}"
+
+- name: create {{ pinpoint_hbase_user }} user home directory from nxdeadmin
+  command: "cp -r /home/nxdeadmin /home/{{ pinpoint_hbase_user }}"
+
+- name: change own {{ pinpoint_hbase_user }} user home directory
+  command: "chown -R {{ pinpoint_hbase_user }}:{{ pinpoint_hbase_group }}  /home/{{ pinpoint_hbase_user }}"

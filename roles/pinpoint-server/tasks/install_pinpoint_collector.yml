@@ -1,0 +1,39 @@
+---
+- name: create pinpoint-collector working directories
+  file:
+    path: "{{ pinpoint_collector_tomcat_home }}/webapps/pinpoint-collector"
+    state: "{{ item }}"
+    owner: "{{ pinpoint_user }}"
+    group: "{{ pinpoint_group }}"
+  with_items:
+    - absent
+    - directory
+
+- name: download and unarchive pinpoint-collector.war
+  unarchive:
+    src: pinpoint-collector-1.7.1.war
+    dest: "{{ pinpoint_collector_tomcat_home }}/webapps/pinpoint-collector"
+    setype: war
+    owner: "{{ pinpoint_user }}"
+    group: "{{ pinpoint_group }}"
+
+- name: config pinpoint-collector logging path
+  template:
+    src:  pinpoint-collector/log4j.xml.j2
+    dest: "{{ pinpoint_collector_tomcat_home }}/webapps/pinpoint-collector/WEB-INF/classes/log4j.xml"
+    mode: 0600
+
+- name: config pinpoint-collector ports
+  template:
+    src:  pinpoint-collector/pinpoint-collector.properties.j2
+    dest: "{{ pinpoint_collector_tomcat_home }}/webapps/pinpoint-collector/WEB-INF/classes/pinpoint-collector.properties"
+    mode: 0600
+
+- name: add pinpoint-collector.service
+  template:
+    src:  pinpoint-collector/pinpoint-collector.service.j2
+    dest: /etc/systemd/system/pinpoint-collector.service
+    mode: 0644
+    owner: root
+    group: root
+  notify: "start pinpoint-collector"

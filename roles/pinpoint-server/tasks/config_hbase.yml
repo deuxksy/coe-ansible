@@ -1,0 +1,23 @@
+---
+- name: config hbase-env.sh
+  template:
+    src:  hbase/hbase-env.sh.j2
+    dest: "{{ pinpoint_hbase_install_dir }}/conf/hbase-env.sh"
+    mode: 0644
+
+- name: config hbase-site.xml
+  template:
+    src:  hbase/hbase-site.xml.j2
+    dest: "{{ pinpoint_hbase_install_dir }}/conf/hbase-site.xml"
+    mode: 0644
+
+- name: add hbase.service
+  template:
+    src:  hbase/hbase.service.j2
+    dest: /etc/systemd/system/hbase.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: start hbase
+  service: name=hbase state=started enabled=yes

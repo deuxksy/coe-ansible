@@ -1,0 +1,12 @@
+---
+- name: create pinpoint web working directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    owner: "{{ pinpoint_user }}"
+    group: "{{ pinpoint_group }}"
+  with_items:
+    - "{{ pinpoint_web_tomcat_home }}"
+    - "{{ pinpoint_web_tomcat_log_dir }}"
+
