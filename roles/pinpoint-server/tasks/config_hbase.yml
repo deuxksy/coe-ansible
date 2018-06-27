@@ -20,4 +20,4 @@
     group: root
 
 - name: start hbase
-  service: name=hbase state=started enabled=yes
+  service: name=hbase state=started #enabled=yes

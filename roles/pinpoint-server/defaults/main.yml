@@ -5,10 +5,10 @@ pinpoint_group: pinpoint
 pinpoint_hbase_user: hbase
 pinpoint_hbase_group: hbase
 
-pinpoint_java_6_home: /sw/jdk1.6.0_45
-pinpoint_java_7_home: /sw/jdk1.7.0_80
-pinpoint_java_8_home: /usr/lib/jvm/jdk1.8.0_131
-pinpoint_java_home: /usr/lib/jvm/jdk1.8.0_131
+pinpoint_java_6_home: /home/ubuntu/jdk1.6.0_45/
+pinpoint_java_7_home: /home/ubuntu/jdk1.7.0_80/
+pinpoint_java_8_home: /usr/lib/jvm/java-8-openjdk-amd64/
+pinpoint_java_home: /usr/lib/jvm/java-8-openjdk-amd64/
 
 pinpoint_hbase_install_dir: /sw/hbase
 pinpoint_data_dir: /data/pinpoint
@@ -28,4 +28,4 @@ pinpoint_collector_span_port: 8888
 pinpoint_collector_stat_port: 8877
 pinpoint_collector_tcp_port: 8866
 
-pinpoint_collector_web_port: 8855
+pinpoint_web_port: 8855
