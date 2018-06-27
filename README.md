@@ -1,5 +1,23 @@
 # Ansible
 
+## 0. install
+#### instll ansible
+```
+sudo apt-get update
+sudo apt-get install software-properties-common
+
+sudo apt-add-repository ppa:ansible/ansible
+
+sudo apt-get update
+sudo apt-get install ansible
+```
+#### add hosts for ansible
+/etc/ansible/hosts
+```
+[pinpoint-server] # name for hosts in main playbook
+localhost ansible_connection=local
+```
+
 ## 1. pinpoint
 pinpoint setup guide on localhost  
 > 다른 서버에 setup 하기 위해서는 /etc/ansible/hosts에 해당 서버를 정의 후
