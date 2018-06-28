@@ -1,0 +1,11 @@
+---
+kibana_install_dir: /sw/kibana
+
+kibana_user: kibana
+kibana_group: kibana
+
+kibana_server_port: 5601
+kibana_server_host: "{{ ansible_default_ipv4.address }}"
+kibana_elasticsearch_url: http://localhost:9200
+
+kibana_data_path: /var/lib/kibana

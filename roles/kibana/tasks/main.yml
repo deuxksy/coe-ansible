@@ -1,0 +1,78 @@
+---
+- name: import repository key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: install apt-related binaries for Ansible to work
+  apt:
+    name: apt-transport-https
+    state: present
+    update_cache: yes
+
+- name: add apt repository
+  apt_repository:
+    repo: "deb https://artifacts.elastic.co/packages/6.x/apt stable main"
+    update_cache: yes
+    state: present
+
+- name: install kibana
+  apt:
+    name: kibana
+    state: present
+    update_cache: yes
+
+- name: create kibana working directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    group: "{{ kibana_group }}"
+    owner: "{{ kibana_user }}"
+  with_items:
+    - "{{ kibana_install_dir }}"
+    - "{{ kibana_data_path }}"
+
+- name: Symlink kibana bin
+  file:
+    src: /usr/share/kibana/bin
+    dest: "{{ kibana_install_dir }}/bin"
+    state: link
+
+- name: Symlink kibana config
+  file:
+    src: /etc/kibana
+    dest: "{{ kibana_install_dir }}/config"
+    state: link
+
+- name: Symlink kibana optimize
+  file:
+    src: /usr/share/kibana/optimize
+    dest: "{{ kibana_install_dir }}/optimize"
+    state: link
+
+- name: Symlink kibana plugins
+  file:
+    src: /usr/share/kibana/plugins
+    dest: "{{ kibana_install_dir }}/plugins"
+    state: link
+
+- name: copy kibana.yml
+  template:
+    src: kibana.yml.j2
+    dest: "{{ kibana_install_dir }}/config/kibana.yml"
+    group: "{{ kibana_group }}"
+    owner: "{{ kibana_user }}"
+
+
+- name: set kibana to start at boot
+  service:
+    name: kibana.service
+    daemon_reload: yes
+    enabled: yes
+  notify: "start kibana"
+
+- include_tasks: change_home_dir.yml
+
+- import_tasks: config_sudoers.yml
+  tags: config_sudoers

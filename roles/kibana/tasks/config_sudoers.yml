@@ -1,0 +1,6 @@
+---
+- name: config kibana group sudoers
+  template:
+    src: sudoers.j2
+    dest: /etc/sudoers.d/kibana
+    mode: 0440

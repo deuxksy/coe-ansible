@@ -5,11 +5,11 @@
   roles:
     - { role: elasticsearch, es_instance_name: "node1" }
 
-#- name: install the kibana
-#  become: yes
-#  hosts: efk
-#  roles:
-#    - kibana
+- name: install the kibana
+  become: yes
+  hosts: efk
+  roles:
+    - kibana
 
 #- name: install the td-agent(fluentd agent)
 #  become: yes

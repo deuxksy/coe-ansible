@@ -1,0 +1,13 @@
+---
+- name: create {{ kibana_user }} user home directory from nxdeadmin
+  command: "cp -r /home/nxdeadmin /home/{{ kibana_user }}"
+
+- name: change own {{ kibana_user }} user home directory
+  command: "chown -R {{ kibana_user }}:{{ kibana_group }}  /home/{{ kibana_user }}"
+
+- name: move {{ kibana_user }} user's home directory
+  user:
+    name: "{{ kibana_user }}"
+    home: "/home/{{ kibana_user }}"
+    shell: /bin/bash
+    move_home: yes
