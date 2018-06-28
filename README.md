@@ -41,3 +41,36 @@ ansible-playbook -v setup-pinpoint.yml
 ### start pinpoint services
 - sudo systemctl start pinpoint-web
 - sudo systemctl start pinpoint-collector
+
+### how to remove
+```sh
+# stop&disable service
+sudo systemctl stop hbase
+sudo systemctl stop pinpoint-web
+sudo systemctl stop pinpoint-collector
+sudo systemctl disable hbase
+sudo systemctl disable pinpoint-web
+sudo systemctl disable pinpoint-collector
+
+# remove service 
+sudo rm /etc/systemd/system/hbase.service
+sudo rm /etc/systemd/system/pinpoint-web.service
+sudo rm /etc/systemd/system/pinpoint-collector.service
+
+# reload daemon
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
+
+# remove folders
+sudo rum -rf {pinpoint_hbase_install_dir}
+sudo rum -rf {pinpoint_data_dir}
+sudo rum -rf {pinpoint_hbase_log_dir}
+
+sudo rum -rf {pinpoint_collector_tomcat_home}
+sudo rum -rf {pinpoint_collector_tomcat_log_dir}
+
+sudo rum -rf {pinpoint_web_tomcat_home}
+sudo rum -rf {pinpoint_web_tomcat_log_dir}
+
+# remove users&groups (optional)
+```
