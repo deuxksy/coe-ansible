@@ -1,0 +1,18 @@
+---
+es_major_version: "6.x"
+es_version: "6.2.3"
+es_apt_key: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+es_apt_url: "deb https://artifacts.elastic.co/packages/{{ es_major_version }}/apt stable main"
+
+es_install_path: /sw/elasticsearch
+es_conf_path: "{{ es_install_path }}/conf"
+es_data_path: /data01/elasticsearch
+es_log_path: /logs/elasticsearch
+es_pid_path: /logs/elasticsearch/PID
+
+es_java_home: /sw/jdk1.8.0_25
+
+es_user: elasticsearch
+es_group: elasticsearch
+
+es_http_port: 9200

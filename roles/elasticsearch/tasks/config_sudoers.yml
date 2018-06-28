@@ -1,0 +1,6 @@
+---
+- name: config elasticsearch group sudoers
+  template:
+    src: sudoers.j2
+    dest: /etc/sudoers.d/elasticsearch
+    mode: 0440

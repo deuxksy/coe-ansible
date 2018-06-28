@@ -1,0 +1,98 @@
+---
+- name: Add Elasticsearch apt key.
+  apt_key:
+    url: https://packages.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Add Elasticsearch repository.
+  apt_repository:
+    repo: "{{ es_apt_url }}"
+    state: present
+    update_cache: yes
+
+- name: Install Elasticsearch.
+  apt:
+    pkg: "elasticsearch={{ es_version }}"
+    state: present
+  register: es_installed
+
+- name: Copy Elasticsearch home directory
+  command: "mv /usr/share/elasticsearch {{ es_install_path }}"
+  when: es_installed.changed
+
+- name: Create Elasticsearch work directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    owner: "{{ es_user }}"
+    group: "{{ es_group }}"
+  with_items:
+    - "{{ es_data_path }}"
+    - "{{ es_log_path }}"
+    - "{{ es_pid_path }}"
+    - "{{ es_conf_path }}"
+
+- name: Change own Elasticsearch home directory
+  command: "chown -R {{ es_user }}:{{ es_group }} {{ es_install_path }}"
+
+- name: Delete Elasticsearch default conf directory
+  file:
+    path: /etc/elasticsearch
+    state: absent
+
+- name: Copy Elasticsearch config yml file
+  template:
+    src: elasticsearch.yml.j2
+    dest: "{{ es_conf_path }}/elasticsearch.yml"
+    owner: "{{ es_user }}"
+    group: "{{ es_group }}"
+    mode: 0750
+
+- name: Copy Elasticsearch config jvm options file
+  template:
+    src: jvm.options.j2
+    dest: "{{ es_conf_path }}/jvm.options"
+    owner: "{{ es_user }}"
+    group: "{{ es_group }}"
+    mode: 0750
+
+- name: Copy Elasticsearch config log4j file
+  template:
+    src: log4j2.properties.j2
+    dest: "{{ es_conf_path }}/log4j2.properties"
+    owner: "{{ es_user }}"
+    group: "{{ es_group }}"
+    mode: 0750
+
+- name: Copy Elasticsearch default env file
+  template:
+    src: default/elasticsearch.j2
+    dest: /etc/default/elasticsearch
+    owner: root
+    group: "{{ es_group }}"
+    mode: 0660
+
+- name: Delete Elasticsearch service file
+  file:
+    path: /usr/lib/systemd/system/elasticsearch.service
+    state: absent
+
+- name: Copy Elasticsearch service file
+  template:
+    src: systemd/elasticsearch.service.j2
+    dest: /etc/systemd/system/elasticsearch.service
+    owner: root
+    group: "{{ es_group }}"
+    mode: 0660
+
+- name: Start Elasticsearch.
+  service: name=elasticsearch state=started enabled=yes
+
+- name: Make sure Elasticsearch is running before proceeding.
+  wait_for: host=localhost port={{ es_http_port }} delay=3 timeout=300
+
+- include_tasks: change_home_dir.yml
+
+- import_tasks: config_sudoers.yml
+  tags: config_sudoers
