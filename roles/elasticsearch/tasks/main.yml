@@ -16,10 +16,6 @@
     state: present
   register: es_installed
 
-- name: Copy Elasticsearch home directory
-  command: "mv /usr/share/elasticsearch {{ es_install_path }}"
-  when: es_installed.changed
-
 - name: Create Elasticsearch work directory
   file:
     path: "{{ item }}"
@@ -32,6 +28,11 @@
     - "{{ es_log_path }}"
     - "{{ es_pid_path }}"
     - "{{ es_conf_path }}"
+    - "{{ es_install_path }}"
+
+#- name: Copy Elasticsearch home directory
+#  command: "mv /usr/share/elasticsearch/* {{ es_install_path }}"
+#  when: es_installed.changed
 
 - name: Change own Elasticsearch home directory
   command: "chown -R {{ es_user }}:{{ es_group }} {{ es_install_path }}"

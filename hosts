@@ -1,0 +1,5 @@
+[pinpoint-server]
+localhost ansible_connection=local
+
+[efk]
+localhost ansible_connection=local

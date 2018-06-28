@@ -10,7 +10,7 @@ es_data_path: /data01/elasticsearch
 es_log_path: /logs/elasticsearch
 es_pid_path: /logs/elasticsearch/PID
 
-es_java_home: /sw/jdk1.8.0_25
+es_java_home: /usr/lib/jvm/java-8-oracle
 
 es_user: elasticsearch
 es_group: elasticsearch

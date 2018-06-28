@@ -1,6 +1,10 @@
 ---
-- name: create {{ es_user }} user home directory from nxdeadmin
-  command: "cp -r /home/nxdeadmin /home/{{ es_user }}"
+#- name: create {{ es_user }} user home directory from nxdeadmin
+#  command: "cp -r /home/nxdeadmin /home/{{ es_user }}"
+- name: Create {{ es_user }} user home
+  file:
+    path: "/home/{{ es_user }}"
+    state: directory
 
 - name: change own {{ es_user }} user home directory
   command: "chown -R {{ es_user }}:{{ es_group }}  /home/{{ es_user }}"
