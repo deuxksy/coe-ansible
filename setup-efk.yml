@@ -11,8 +11,8 @@
   roles:
     - kibana
 
-#- name: install the td-agent(fluentd agent)
-#  become: yes
-#  hosts: efk
-#  roles:
-#    - td-agent
+- name: install the td-agent(fluentd agent)
+  become: yes
+  hosts: efk
+  roles:
+    - td-agent
