@@ -1,0 +1,16 @@
+{{ td_agent_log_file }} {
+  daily
+  rotate 30
+  compress
+  delaycompress
+  notifempty
+  create 640 td-agent td-agent
+  sharedscripts
+  postrotate
+    pid={{ td_agent_pid_file }}
+    if [ -s "$pid" ]
+    then
+      kill -USR1 "$(cat $pid)"
+    fi
+  endscript
+}

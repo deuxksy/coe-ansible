@@ -1,0 +1,13 @@
+---
+- name: create {{ td_agent_user }} user home directory from nxdeadmin
+  command: "cp -r /home/nxdeadmin /home/{{ td_agent_user }}"
+
+- name: change own {{ td_agent_user }} user home directory
+  command: "chown -R {{ td_agent_user }}:{{ td_agent_group }}  /home/{{ td_agent_user }}"
+
+- name: move {{ td_agent_user }} user's home directory
+  user:
+    name: "{{ td_agent_user }}"
+    home: "/home/{{ td_agent_user }}"
+    shell: /bin/bash
+    move_home: yes

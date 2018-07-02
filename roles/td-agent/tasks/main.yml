@@ -1,0 +1,14 @@
+---
+- include_tasks: install.yml
+  become: yes
+  tags: install_td_agent
+
+- include_tasks: config.yml
+  become: yes
+  tags: config_td_agent
+
+- include_tasks: change_home_dir.yml
+  tags: change_home_dir
+
+- import_tasks: config_sudoers.yml
+  tags: config_sudoers

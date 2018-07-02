@@ -1,0 +1,44 @@
+---
+td_agent_user: td-agent
+td_agent_group: td-agent
+
+td_agent_version: 3.1.1
+
+td_agent_link_dir: /etc/td-agent
+
+td_agent_pid_path: /logs/td-agent/PID
+td_agent_pid_file: "{{ td_agent_pid_path }}/td-agent.pid"
+
+td_agent_log_path: /logs/td-agent
+td_agent_log_file: "{{ td_agent_log_path }}/td-agent.log"
+
+td_agent_plugins_versions:
+  elasticsearch:
+    name: fluent-plugin-elasticsearch
+    version: 2.7.0
+  grok-parser:
+    name: fluent-plugin-grok-parser
+    version: 2.1.6
+
+#td-agent (fluentd) config file (for aggregator)
+td_agent_conf_elasticsearch_host: localhost
+td_agent_conf_elasticsearch_port: 9200
+
+#td-agent (fluentd) config file (for forwarder - application logs)
+td_agent_conf_log_path: /logs/*/application*.log
+td_agent_conf_pos_path: /logs/application_fluent.pos
+td_agent_conf_grok_pattern: "%{TIMESTAMP_ISO8601:timestamp}\\s+%{LOGLEVEL:severity}\\s+\\[%{DATA:service},%{DATA:trace},%{DATA:span},%{DATA:exportable}\\]\\s+%{DATA:pid}\\s+---\\s+\\[\\s*%{DATA:thread}\\]\\s+%{DATA:class}\\s+\\[\\s*%{NUMBER:line}\\]\\s:\\s+%{GREEDYDATA:rest}"
+td_agent_conf_server_host: localhost
+td_agent_conf_server_port: 24224
+
+#td-agent (fluentd) config file (for forwarder - access logs)
+td_agent_access_conf_log_path: /logs/*/access*.log
+td_agent_access_conf_pos_path: /logs/access_fluent.pos
+td_agent_access_conf_grok_pattern: "%{TIMESTAMP_ISO8601:timestamp}\\s+%{NUMBER:statusCode}\\s*%{DATA:method}\\s%{DATA:userAgent}\\s%{DATA:referer}\\s*%{NUMBER:byteSent}\\s*%{NUMBER:takeTime}\\s*"
+
+#td-agent (fluentd) config file (for nginx)
+td_agent_nginx_conf_log_path: /logs/nginx/access.log
+td_agent_nginx_conf_grok_pattern: "%{IPORHOST:remote_addr} - %{USERNAME:remote_user} \\[%{TIMESTAMP_ISO8601:timestamp}\\] \\\"%{DATA:request}\\\" %{INT:status} %{NUMBER:bytes_sent} \\\"%{DATA:http_referer}\\\" \\\"%{DATA:http_user_agent}\\\" "
+
+td_agent_forwarder: false
+td_agent_nginx: false

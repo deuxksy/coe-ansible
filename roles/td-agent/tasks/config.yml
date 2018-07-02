@@ -1,0 +1,94 @@
+---
+- name: create working directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: td-agent
+    group: td-agent
+  with_items:
+    - "{{ td_agent_log_path }}"
+    - "{{ td_agent_pid_path }}"
+
+- name: rename default td-agent.conf
+  command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak
+
+- name: copy td-agent.conf for aggregator
+  when: not td_agent_forwarder and not td_agent_nginx
+  become: yes
+  template:
+    src: td-agent.conf.j2
+    dest: /etc/td-agent/td-agent.conf
+    group: td-agent
+    owner: td-agent
+  notify:
+    - reload td-agent
+
+- name: copy td-agent.conf for forwarder
+  when: td_agent_forwarder
+  become: yes
+  template:
+    src: td-agent_forwarder.conf.j2
+    dest: /etc/td-agent/td-agent.conf
+    group: td-agent
+    owner: td-agent
+  notify:
+    - reload td-agent
+
+- name: copy td-agent.conf for nginx
+  when: td_agent_nginx
+  become: yes
+  template:
+    src: td-agent_nginx.conf.j2
+    dest: /etc/td-agent/td-agent.conf
+    group: td-agent
+    owner: td-agent
+  notify:
+    - reload td-agent
+
+- name: Create empty default environment file (forwarder)
+  when: td_agent_forwarder or td_agent_nginx
+  copy:
+    dest: "{{ item }}"
+    content: ''
+    group: td-agent
+    owner: td-agent
+  with_items:
+    - "{{ td_agent_conf_pos_path }}"
+    - "{{ td_agent_access_conf_pos_path }}"
+
+- name: chane own for confituration directory
+  file:
+    path: /etc/td-agent
+    group: td-agent
+    owner: td-agent
+    state: directory
+    recurse: yes
+
+- name: link for configuration file
+  file:
+    src: /etc/td-agent
+    dest: "{{ td_agent_link_dir }}"
+    group: td-agent
+    owner: td-agent
+    state: link
+
+- name: config td-agent service file
+  template:
+    src: td-agent.service.j2
+    dest: /lib/systemd/system/td-agent.service
+    group: root
+    owner: root
+
+- name: customize logrotate rules
+  template:
+    src: td-agent.logrotate.j2
+    dest: /etc/logrotate.d/td-agent
+    owner: root
+    group: root
+    mode: 0644
+
+- name: set td-agent to start at boot
+  service:
+    name: td-agent.service
+    daemon_reload: yes
+    state: restarted

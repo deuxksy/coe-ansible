@@ -1,0 +1,6 @@
+---
+- name: config td-agent group sudoers
+  template:
+    src: sudoers.j2
+    dest: /etc/sudoers.d/td-agent
+    mode: 0440

@@ -1,0 +1,39 @@
+<match debug.**>
+	@type stdout
+</match>
+
+<source>
+	@type tail
+	path {{ td_agent_nginx_conf_log_path }}
+	pos_file {{ td_agent_access_conf_pos_path }}
+	tag nginx_access
+	<parse>
+		@type multiline_grok
+		grok_pattern {{ td_agent_nginx_conf_grok_pattern }}
+        multiline_start_regexp /^[\d]/
+	</parse>
+</source>
+<match nginx_access>
+	@type copy
+	<store>
+		@type stdout
+	</store>
+	<store>
+		@type forward
+		@log_level debug
+		<server>
+			host {{ td_agent_conf_server_host }}
+			port {{ td_agent_conf_server_port }}
+		</server>
+		buffer_type memory
+		buffer_chunk_limit 16m
+		buffer_queue_limit 128
+		flush_interval 30s
+		flush_at_shutdown false
+		retry_limit 17
+		retry_wait 1s
+		max_retry_wait 1m
+		disable_retry_limit true
+		num_threads 4
+	</store>
+</match>

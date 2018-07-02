@@ -1,0 +1,97 @@
+<system>
+    @log_level info
+</system>
+
+<source>
+    @type forward
+    bind 0.0.0.0
+    port 24224
+    @log_level debug
+</source>
+
+<match app.**>
+    @type copy
+    <store>
+        @type elasticsearch
+        host {{ td_agent_conf_elasticsearch_host }}
+        port {{ td_agent_conf_elasticsearch_port }}
+        logstash_format true
+        logstash_prefix nxde_api
+        logstash_dateformat %Y%m%d
+        time_key timestamp
+        include_tag_key true
+        type_name app_log
+        tag_key @log_name
+        buffer_type memory
+        buffer_chunk_limit 16m
+        buffer_queue_limit 128
+        flush_interval 30s
+        flush_at_shutdown false
+        retry_limit 17
+        retry_wait 1s
+        max_retry_wait 1m
+        disable_retry_limit true
+        num_threads 4
+    </store>
+    <store>
+        @type stdout
+    </store>
+</match>
+
+<match access.**>
+    @type copy
+    <store>
+        @type elasticsearch
+        host {{ td_agent_conf_elasticsearch_host }}
+        port {{ td_agent_conf_elasticsearch_port }}
+        logstash_format true
+        logstash_prefix nxde_gw
+        logstash_dateformat %Y%m%d
+        time_key timestamp
+        include_tag_key true
+        type_name access_log
+        tag_key @log_name
+        buffer_type memory
+        buffer_chunk_limit 16m
+        buffer_queue_limit 128
+        flush_interval 30s
+        flush_at_shutdown false
+        retry_limit 17
+        retry_wait 1s
+        max_retry_wait 1m
+        disable_retry_limit true
+        num_threads 4
+    </store>
+    <store>
+        @type stdout
+    </store>
+</match>
+
+<match nginx_access.**>
+    @type copy
+    <store>
+        @type elasticsearch
+        host {{ td_agent_conf_elasticsearch_host }}
+        port {{ td_agent_conf_elasticsearch_port }}
+        logstash_format true
+        logstash_prefix nxde_nginx
+        logstash_dateformat %Y%m%d
+        time_key timestamp
+        include_tag_key true
+        type_name nginx_access_log
+        tag_key @log_name
+        buffer_type memory
+        buffer_chunk_limit 16m
+        buffer_queue_limit 128
+        flush_interval 30s
+        flush_at_shutdown false
+        retry_limit 17
+        retry_wait 1s
+        max_retry_wait 1m
+        disable_retry_limit true
+        num_threads 4
+    </store>
+    <store>
+        @type stdout
+    </store>
+</match>
