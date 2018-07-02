@@ -65,12 +65,14 @@
     owner: "{{ kibana_user }}"
 
 
-- name: set kibana to start at boot
-  service:
-    name: kibana.service
-    daemon_reload: yes
-    enabled: yes
-  notify: "start kibana"
+#- name: set kibana to start at boot
+#  service:
+#    name: kibana.service
+#    daemon_reload: yes
+#    enabled: yes
+#  notify: "start kibana"
+- name: Start Kibana.
+  service: name=kibana state=started enabled=yes
 
 - include_tasks: change_home_dir.yml
 

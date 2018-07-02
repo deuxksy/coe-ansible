@@ -30,9 +30,9 @@
     - "{{ es_conf_path }}"
     - "{{ es_install_path }}"
 
-#- name: Copy Elasticsearch home directory
-#  command: "mv /usr/share/elasticsearch/* {{ es_install_path }}"
-#  when: es_installed.changed
+- name: Copy Elasticsearch home directory
+  command: "mv /usr/share/elasticsearch/* {{ es_install_path }}"
+  when: es_installed.changed
 
 - name: Change own Elasticsearch home directory
   command: "chown -R {{ es_user }}:{{ es_group }} {{ es_install_path }}"
