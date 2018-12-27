@@ -23,61 +23,61 @@
 
 3. how to run setup
 
-    ```sh
-    ansible-playbook -v setup-pinpoint.yml
-    ```
+```sh
+ansible-playbook -v setup-pinpoint.yml
+```
 
 4. start pinpoint services
 
-    ```sh
-    sudo systemctl start pinpoint-web
-    sudo systemctl start pinpoint-collector
-    ```
+```sh
+sudo systemctl start pinpoint-web
+sudo systemctl start pinpoint-collector
+```
 
 5. how to remove
 
-    ```sh
-    # stop&disable service
-    sudo systemctl stop hbase
-    sudo systemctl stop pinpoint-web
-    sudo systemctl stop pinpoint-collector
-    sudo systemctl disable hbase
-    sudo systemctl disable pinpoint-web
-    sudo systemctl disable pinpoint-collector
+```sh
+# stop&disable service
+sudo systemctl stop hbase
+sudo systemctl stop pinpoint-web
+sudo systemctl stop pinpoint-collector
+sudo systemctl disable hbase
+sudo systemctl disable pinpoint-web
+sudo systemctl disable pinpoint-collector
 
-    # remove service 
-    sudo rm /etc/systemd/system/hbase.service
-    sudo rm /etc/systemd/system/pinpoint-web.service
-    sudo rm /etc/systemd/system/pinpoint-collector.service
+# remove service 
+sudo rm /etc/systemd/system/hbase.service
+sudo rm /etc/systemd/system/pinpoint-web.service
+sudo rm /etc/systemd/system/pinpoint-collector.service
 
-    # reload daemon
-    sudo systemctl daemon-reload
-    sudo systemctl reset-failed
+# reload daemon
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
 
-    # remove folders
-    sudo rum -rf {pinpoint_hbase_install_dir}
-    sudo rum -rf {pinpoint_data_dir}
-    sudo rum -rf {pinpoint_hbase_log_dir}
+# remove folders
+sudo rum -rf {pinpoint_hbase_install_dir}
+sudo rum -rf {pinpoint_data_dir}
+sudo rum -rf {pinpoint_hbase_log_dir}
 
-    sudo rum -rf {pinpoint_collector_tomcat_home}
-    sudo rum -rf {pinpoint_collector_tomcat_log_dir}
+sudo rum -rf {pinpoint_collector_tomcat_home}
+sudo rum -rf {pinpoint_collector_tomcat_log_dir}
 
-    sudo rum -rf {pinpoint_web_tomcat_home}
-    sudo rum -rf {pinpoint_web_tomcat_log_dir}
+sudo rum -rf {pinpoint_web_tomcat_home}
+sudo rum -rf {pinpoint_web_tomcat_log_dir}
 
-    # remove users&groups (optional)
-    ```
+# remove users&groups (optional)
+```
 
 ### EFK
 
 1. how to run setup
 
-    ```sh
-    ansible-playbook -v setup-efk.yml
-    ```
-    
+```sh
+ansible-playbook -v setup-efk.yml
+```
+
 ## Related Links
 
-- [MSA CoE]()
+- [MSA CoE Guide](https://coe.gitbook.io/guide/ansible/ansible)
 
-- [Official site]()
+- [Official site](https://www.ansible.com/resources/get-started)
